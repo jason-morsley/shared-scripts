@@ -11,11 +11,11 @@
 #       |  <  |__ < \___ \        
 #       | . \ ___) |____) |       
 #       |_|\_\____/|_____/        
-#                                                                  
+#                                  and docker                                
 
 set -e -o pipefail -u
 
-echo "------------------------------------------------------------> INSTALLING K3S"
+echo "------------------------------------------------------------> INSTALLING Docker & K3S"
 
 PID=$$
 echo "PID: ${PID}"
@@ -24,13 +24,15 @@ SCRIPT_NAME=$(basename $0)
 echo "SCRIPT_NAME: ${SCRIPT_NAME}"
 
 {
-  echo "Download the K3S install script and execute it..."
-  curl -sfL https://get.k3s.io | sh
+  echo "Download the Docker install script and execute it..."
+  curl -fsSL https://get.docker.com | sh
   echo "Add the user 'ubuntu' to the group 'docker'..."
   sudo usermod -aG docker ubuntu
+  echo "Download the K3S install script and execute it..."
+  curl -sfL https://get.k3s.io | sh
   
 } || {
-  echo "-----------------------------------------> FAILED TRYING TO INSTALL K3S! :-(" 1>&2
+  echo "-----------------------------------------> FAILED TRYING TO INSTALL Docker & K3S! :-(" 1>&2
   exit 666
 }
 
@@ -44,6 +46,6 @@ function error() {
 
 trap "error ${LINENO} ${?}" ERR
 
-echo "-------------------------------------------------------------> K3S INSTALLED"
+echo "-------------------------------------------------------------> Docker & K3S INSTALLED"
 
 exit 0
